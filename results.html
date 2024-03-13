@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qualifier Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        ul {
+            list-style-type: '\274C';
+        }
+    </style>
+</head>
+<body>
+    <h1>🔢 Qualifier Results</h1>
+
+    <!-- Mostrar datos del evaluador -->
+    <div id="evaluator-data">
+        <p><b>Nombre del Evaluador: </b><span id="evaluador"></span></p>
+        <p><b>Nombre del Informe: </b><span id="informe"></span></p>
+        <p><b>Semestre: </b><span id="semestre"></span></p>
+        <p><b>Grupo: </b><span id="grupo"></span></p>
+    </div>
+
+    <div id="results"></div>
+
+    <div id="improvements" style="display: none;">
+        <p id="improvement-message"></p>
+        <ul id="improvement-list">
+            <!-- Los elementos de la lista de mejoras se agregarán aquí dinámicamente -->
+        </ul>
+    </div>
+
+    <div id="success" style="display: none;">
+        <p></p>
+    </div>
+
+    <script>
+        function showResults() {
+            var params = new URLSearchParams(window.location.search);
+            var totalItems = 9; // Número total de ítems en el checklist
+            var score = 0;
+            for (var i = 1; i <= totalItems; i++) {
+            if (params.get('checklist_item_' + i) === 'SI') score++;
+            }
+            var percentage = (score / totalItems) * 100;
+            document.getElementById('results').innerHTML = "<p><b>Puntaje:</b> " + percentage.toFixed(2) + "%</p>";
+
+            // Mostrar datos del evaluador
+            document.getElementById('evaluador').textContent = params.get('evaluador');
+            document.getElementById('informe').textContent = params.get('informe');
+            document.getElementById('semestre').textContent = params.get('semestre');
+            document.getElementById('grupo').textContent = params.get('grupo');
+
+            var message = ""; // Variable para almacenar el mensaje correspondiente
+            if (percentage === 0) {
+                message = "No cumple con ningún aspecto de los criterios de evaluación. Considerar lo siguiente:";
+                document.getElementById('improvements').style.display = 'block';
+                document.getElementById('improvement-message').innerHTML = `<strong>Observación:</strong> ${message}`;
+            } else if (percentage <= 50) {
+                message = "Existen varios aspectos que aún deben considerarse en los criterios de evaluación:";
+                document.getElementById('improvements').style.display = 'block';
+                document.getElementById('improvement-message').innerHTML = `<strong>Observación:</strong> ${message}`;
+            } else if (percentage < 100) {
+                message = "Algunos aspectos podrían mejorarse en términos de los criterios de evaluación:";
+                document.getElementById('improvements').style.display = 'block';
+                document.getElementById('improvement-message').innerHTML = `<strong>Observación:</strong> ${message}`;
+            } else {
+                message = "Cumple satisfactoriamente con todos los aspectos evaluados.";
+                document.getElementById('success').style.display = 'block';
+                document.getElementById('success').getElementsByTagName('p')[0].innerHTML = `<strong>Observación:</strong> ${message}`;
+            }
+
+            if (percentage < 100) {
+                var improvementList = document.getElementById('improvement-list');
+                improvementList.innerHTML = ""; // Limpiar la lista antes de agregar nuevos elementos
+
+                for (var i = 1; i <= totalItems; i++) {
+                    if (params.get('checklist_item_' + i) !== 'SI') {
+                        switch(i) {
+                            case 1:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>La información recopilada no es lo suficientemente profunda y relevante.</li>";
+                                break;
+                            case 2:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>No se citan adecuadamente las fuentes de información bajo el estilo de redacción propuesto.</li>";
+                                break;
+                            case 3:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>No se identifican ni utilizan fuentes de información variadas y confiables.</li>";
+                                break;
+                            case 4:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>Falta de crítica y creatividad en la aplicación de las herramientas conceptuales.</li>";
+                                break;
+                            case 5:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>Falta de coherencia y precisión en la interpretación de los datos y resultados obtenidos.</li>";
+                                break;
+                            case 6:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>No se identifican adecuadamente las relaciones causa-efecto y tendencias relevantes.</li>";
+                                break;
+                            case 7:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>La propuesta presentada carece de fundamentación y argumentación sólida.</li>";
+                                break;
+                            case 8:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>La solución propuesta no se describe con especificidad y claridad.</li>";
+                                break;
+                            case 9:
+                                improvementList.innerHTML += "<li style='padding-bottom: 0.5em'>La propuesta de solución al problema planteado no es original ni innovadora.</li>";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        window.onload = showResults;
+    </script>
+</body>
+</html>

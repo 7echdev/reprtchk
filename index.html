@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Qualifier</title>
+    <style>
+        #index-results {
+            display: none;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        input:placeholder-shown {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>📰 Report Qualifier</h1>
+    <div><b>Datos de Evaluación:</b></div>
+    <p></p>
+    <form action="results.html" method="get">
+        <input type="text" id="evaluador" name="evaluador" placeholder="Nombre del Evaluador" size="44" required><br><br>
+        <input type="text" id="informe" name="informe" placeholder="Nombre del Informe" size="44" required><br><br>
+        <input type="text" id="semestre" name="semestre" placeholder="Semestre" size="44" maxlength="2" pattern="^[0-9]+$" title="Numbers 0-9, 2 digits Max." required><br><br>
+        <input type="text" id="grupo" name="grupo" placeholder="Grupo" size="44" required><br><br>
+    <div><b>Instrucciones:</b> Seleccione a continuación únicamente los aspectos que cumple el informe evaluado.</div>
+        <h4 style="margin-top: 1em; margin-bottom: 0.5em;">🔎 Investigación</h4>
+        <ol>
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_1" value="SI"> La información recopilada es profunda y relevante.</li>
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_2" value="SI"> Se citan adecuadamente las fuentes de información bajo el estilo de redacción propuesto.</li>
+            <li><input type="checkbox" name="checklist_item_3" value="SI"> Se identifican y utilizan fuentes de información variadas y confiables.</li>
+        </ol>
+        <h4 style="margin-top: 0em; margin-bottom: 0.5em;">🧠 Análisis</h4>
+        <ol start="4">
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_4" value="SI"> Se aplican con crítica y creatividad las herramientas conceptuales.</li>
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_5" value="SI"> Existe coherencia y precisión en la interpretación de los datos y resultados obtenidos.</li>
+            <li><input type="checkbox" name="checklist_item_6" value="SI"> Se identifican adecuadamente las relaciones causa-efecto y tendencias relevantes.</li>
+        </ol>
+        <h4 style="margin-top: 0em; margin-bottom: 0.5em;">📄 Propuesta</h4>
+        <ol start="7">
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_7" value="SI"> La propuesta presentada tiene una fundamentación y argumentación sólida.</li>
+            <li style="padding-bottom: 0.5em"><input type="checkbox" name="checklist_item_8" value="SI"> La solución propuesta se describe con especificidad y claridad.</li>
+            <li><input type="checkbox" name="checklist_item_9" value="SI"> La propuesta de solución al problema planteado es original e innovadora.</li>
+        </ol>
+        <input type="submit" value="Enviar">
+    </form>
+
+    <div id="index-results">
+        <p>Puntaje: </p>
+    </div>
+
+    <script>
+        function showResults() {
+            var params = new URLSearchParams(window.location.search);
+            var score = 0;
+            if (params.get('checklist_item_1') === 'SI') score++;
+            if (params.get('checklist_item_2') === 'SI') score++;
+            if (params.get('checklist_item_3') === 'SI') score++;
+            // Agrega más condiciones según la cantidad de elementos en el checklist
+            document.getElementById('index-results').innerHTML = "<p>Puntaje: " + score + "</p>";
+        }
+
+        window.onload = showResults;
+    </script>
+</body>
+</html>
